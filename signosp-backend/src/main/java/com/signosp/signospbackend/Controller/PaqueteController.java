@@ -17,9 +17,9 @@ public class PaqueteController {
     public final PaqueteService paqueteService;
 
     @GetMapping
-    public List<Paquete> getAllPaquetes(){
-        return paqueteRepository.findAll();
-    }
+        public List<PaqueteDTO> getAlls(){
+            return paqueteService.findAll();
+        }
     @GetMapping("/bxn/paquete")
     public PaqueteDTO getPaqueteNombre(@PathVariable String nombre){
         return paqueteService.getPaquetePorNombre(nombre);

@@ -17,25 +17,25 @@ public class EventoController {
     public final EventoService eventoService;
 
     @GetMapping
-    public List<Evento> getAllCliente() {
-        return eventoRepository.findAll();
-    }
-
-    @GetMapping("/{id}")
-    public EventoDTO getEventoById(@PathVariable Long id){
-        return eventoService.getEventoById(id);
-    }
-
-    @PostMapping
-    public void CreateEvento(@RequestBody EventoDTO evento) {
-        eventoService.crearEvento(evento);
-    }
-
-    @PutMapping
-    public void modificarEvento(@RequestBody EventoDTO eventoDTO) {
-     eventoService.modificarEvento(eventoDTO);
-    }
-
+        public List<EventoDTO> getAllEventos(){
+            return eventoService.findAll();
+        }
+        @GetMapping({"id"})
+        public EventoDTO eventoById(@PathVariable Long id){
+            return eventoService.byId(id);
+        }
+        @PostMapping
+        public void crearEvento(@RequestBody EventoDTO eventoDTO){
+            eventoService.crearEvento(eventoDTO);
+        }
+        @PutMapping
+        public void modificarEvento(@RequestBody EventoDTO eventoDTO){
+            eventoService.modificarEvento(eventoDTO);
+        }
+        @DeleteMapping
+        public void eliminarEvento(@PathVariable Long id){
+            eventoService.eliminarEvento(id);
+        }
     @GetMapping("/busqueda/categoria/{categoria}")
     public List<Evento> busquedaPorCategoria(@PathVariable String categoria){
         return eventoService.eventosPorCategoria(categoria);

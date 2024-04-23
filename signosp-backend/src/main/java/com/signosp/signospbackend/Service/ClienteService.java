@@ -90,5 +90,13 @@ public class ClienteService {
         ClienteDTO resultado = convertirClinteDTO(c);
         return resultado;
     }
+    public List<ClienteDTO> findAll(){
+        List<Cliente> a = clienteRepository.findAll();
+        List<ClienteDTO> list = new ArrayList<>();
+        for(Cliente c : a){
+            list.add(convertirClinteDTO(c));
+        }
+        return list;
+    }
 
 }

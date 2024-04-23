@@ -15,6 +15,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ComentarioService {
@@ -59,5 +62,17 @@ public class ComentarioService {
     public ResponseEntity<String> eliminarComentario(Long id_comentario){
         comentarioRepository.deleteById(id_comentario);
         return ResponseEntity.ok("Comentario eliminado correctamente.");
+    }
+
+    public List<ComentarioDTO> findAll() {
+        List<Comentario> a = comentarioRepository.findAll();
+        List<ComentarioDTO> b = new ArrayList<>();
+        for(Comentario c : a){
+            b.add(convertirComentarioDTO(c));
+        }
+        return b;
+    }
+    public ComentarioDTO byId(Long id){
+        return convertirComentarioDTO(comentarioRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("no encontrado")));
     }
 }

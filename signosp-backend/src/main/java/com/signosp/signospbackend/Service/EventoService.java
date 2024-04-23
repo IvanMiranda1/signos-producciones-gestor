@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -95,5 +96,19 @@ public class EventoService {
     public List<Evento> eventosPorCategoria(String categoria){
         List<Evento> eventos = eventoRepository.findPorCategoria(categoria);
         return eventos;
+    }
+
+    public List<EventoDTO> findAll() {
+            List<Evento> a = eventoRepository.findAll();
+            List<EventoDTO> b = new ArrayList<>();
+            for(Evento c : a){
+                b.add(convertirEventoDTO(c));
+            }
+            return b;
+    }
+    public EventoDTO byId(Long id) {
+            Evento a = eventoRepository.findById(id)
+                    .orElseThrow(()-> new EntityNotFoundException("Evento"));
+            return convertirEventoDTO(a);
     }
 }

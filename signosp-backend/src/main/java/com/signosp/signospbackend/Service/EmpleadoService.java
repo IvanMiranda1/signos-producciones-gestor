@@ -12,7 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -79,4 +81,17 @@ public class EmpleadoService {
         empleadoRepository.deleteById(id_empleado);
     }
 
+    public EmpleadoDTO byId(Long id) {
+            Empleado a = empleadoRepository.findById(id)
+                    .orElseThrow(()-> new EntityNotFoundException("Empleado"));
+            return convertirEmpleadoDTO(a);
+    }
+    public List<EmpleadoDTO> findAll() {
+            List<Empleado> a = empleadoRepository.findAll();
+            List<EmpleadoDTO> b = new ArrayList<>();
+            for(Empleado c : a){
+                b.add(convertirEmpleadoDTO(c));
+            }
+            return b;
+        }
 }

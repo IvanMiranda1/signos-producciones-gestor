@@ -14,12 +14,11 @@ import java.util.List;
 @RequestMapping("/api/categoria")
 @RequiredArgsConstructor
 public class CategoriaController {
-    public final CategoriaRepository categoriaRepository;
     public final CategoriaService categoriaService;
 
     @GetMapping
-    public List<Categoria> getAllCategorias(){
-        return categoriaRepository.findAll();
+    public List<CategoriaDTO> getAllCategorias(){
+        return categoriaService.findAll();
     }
     @GetMapping({"/{id}"})
     public CategoriaDTO categoriaById(@PathVariable Long id){
@@ -30,10 +29,13 @@ public class CategoriaController {
         categoriaService.crearCategoria(categoriaDTO);
     }
     @PutMapping
-    public void modificarCliente(@RequestBody CategoriaDTO categoriaDTO){
+    public void modificarCategoria(@RequestBody CategoriaDTO categoriaDTO){
         categoriaService.modificarCategoria(categoriaDTO);
     }
-
+    @DeleteMapping
+    public void deleteCategoria(@PathVariable Long id) {
+        categoriaService.eliminarCategoria(id);
+    }
 
 
 

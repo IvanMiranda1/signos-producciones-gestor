@@ -3,10 +3,14 @@ package com.signosp.signospbackend.Service;
 import com.signosp.signospbackend.Models.subtarea.Subtarea;
 import com.signosp.signospbackend.Models.subtarea.SubtareaDTO;
 import com.signosp.signospbackend.Models.subtarea.SubtareaRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -43,4 +47,18 @@ public class SubtareaService {
         subtareaRepository.deleteById(id_subtarea);
     }
 
+    public List<SubtareaDTO> findAll() {
+            List<Subtarea> a = subtareaRepository.findAll();
+            List<SubtareaDTO> b = new ArrayList<>();
+            for(Subtarea c : a){
+                b.add(convertirSubtareaDTO(c));
+            }
+            return b;
+        }
+
+    public SubtareaDTO byId(Long id) {
+            Subtarea a = subtareaRepository.findById(id)
+                    .orElseThrow(()-> new EntityNotFoundException("Subtarea"));
+            return convertirSubtareaDTO(a);
+        }
 }

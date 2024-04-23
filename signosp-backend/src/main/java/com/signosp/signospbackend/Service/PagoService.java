@@ -71,4 +71,17 @@ public class PagoService {
         cuotaRepository.deleteByIdPago(id_pago);
     }
 
+    public List<PagoDTO> findAll() {
+            List<Pago> a = pagoRepository.findAll();
+            List<PagoDTO> b = new ArrayList<>();
+            for(Pago c : a){
+                b.add(convertirPagoDTO(c));
+            }
+            return b;
+        }
+    public PagoDTO byId(Long id) {
+            Pago a = pagoRepository.findById(id)
+                    .orElseThrow(()-> new EntityNotFoundException("PagoDTO"));
+            return convertirPagoDTO(a);
+        }
 }

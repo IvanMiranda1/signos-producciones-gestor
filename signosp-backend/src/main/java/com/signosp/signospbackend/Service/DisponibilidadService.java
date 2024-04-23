@@ -11,6 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class DisponibilidadService {
@@ -52,5 +55,20 @@ public class DisponibilidadService {
 
     public void eliminarDisponibilidad(Long id_disponibilidad){
         disponibilidadRepository.deleteById(id_disponibilidad);
+    }
+
+    public List<DisponibilidadDTO> findAll() {
+        List<Disponibilidad> a = disponibilidadRepository.findAll();
+        List<DisponibilidadDTO> b = new ArrayList<>();
+        for(Disponibilidad c : a){
+            b.add(convertirDisponibilidadDTO(c));
+        }
+        return b;
+    }
+
+    public DisponibilidadDTO byId(Long id) {
+        Disponibilidad a = disponibilidadRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Disponibilidad"));
+        return convertirDisponibilidadDTO(a);
     }
 }

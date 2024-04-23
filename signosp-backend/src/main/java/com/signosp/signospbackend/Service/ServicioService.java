@@ -3,10 +3,14 @@ package com.signosp.signospbackend.Service;
 import com.signosp.signospbackend.Models.servicio.Servicio;
 import com.signosp.signospbackend.Models.servicio.ServicioDTO;
 import com.signosp.signospbackend.Models.servicio.ServicioRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -40,4 +44,17 @@ public class ServicioService {
         servicioRepository.deleteById(id_servicio);
     }
 
+    public List<ServicioDTO> findAll() {
+            List<Servicio> a = servicioRepository.findAll();
+            List<ServicioDTO> b = new ArrayList<>();
+            for(Servicio c : a){
+                b.add(convertirServicioDTO(c));
+            }
+            return b;
+    }
+    public ServicioDTO byId(Long id) {
+            Servicio a = servicioRepository.findById(id)
+                    .orElseThrow(()-> new EntityNotFoundException("Servicio"));
+            return convertirServicioDTO(a);
+        }
 }

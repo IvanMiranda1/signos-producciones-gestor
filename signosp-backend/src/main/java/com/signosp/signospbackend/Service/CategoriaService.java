@@ -9,6 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class CategoriaService {
@@ -46,5 +49,14 @@ public class CategoriaService {
     }
     public void eliminarCategoria(Long id_categoria){
         categoriaRepository.deleteById(id_categoria);
+    }
+
+    public List<CategoriaDTO> findAll(){
+        List<Categoria> listado = categoriaRepository.findAll();
+        List<CategoriaDTO> listadoDTO = new ArrayList<>();
+        for (Categoria cat: listado){
+            listadoDTO.add(convertirCategoriaDTO(cat));
+        }
+        return listadoDTO;
     }
 }

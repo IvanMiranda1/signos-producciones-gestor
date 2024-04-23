@@ -17,8 +17,8 @@ public class ClienteController {
     public final ClienteService clienteService;
 
     @GetMapping
-    public List<Cliente> getAllClientes(){
-        return clienteRepository.findAll();
+    public List<ClienteDTO> getAllClientes(){
+        return clienteService.findAll();
     }
     //busqueda con nombre quizas
     @GetMapping("/bxn/{nombre}")

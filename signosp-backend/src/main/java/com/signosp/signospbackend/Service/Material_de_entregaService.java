@@ -12,6 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class Material_de_entregaService {
@@ -59,4 +62,17 @@ public class Material_de_entregaService {
     }
 
 
+    public List<Material_de_entregaDTO> findAll() {
+            List<Material_de_entrega> a = materialDeEntregaRepository.findAll();
+            List<Material_de_entregaDTO> b = new ArrayList<>();
+            for(Material_de_entrega c : a){
+                b.add(convertirMDEDTO(c));
+            }
+            return b;
+        }
+    public Material_de_entregaDTO byId(Long id) {
+            Material_de_entrega a = materialDeEntregaRepository.findById(id)
+                    .orElseThrow(()-> new EntityNotFoundException("Material_de_entrega"));
+            return convertirMDEDTO(a);
+        }
 }

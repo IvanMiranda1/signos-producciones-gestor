@@ -3,10 +3,14 @@ package com.signosp.signospbackend.Service;
 import com.signosp.signospbackend.Models.especialidad.Especialidad;
 import com.signosp.signospbackend.Models.especialidad.EspecialidadDTO;
 import com.signosp.signospbackend.Models.especialidad.EspecialidadRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -41,4 +45,19 @@ public class EspecialidadService {
     public void eliminarEspecialidad(Long id_especialidad){
         especialidadRepository.deleteById(id_especialidad);
     }
+
+    public List<EspecialidadDTO> findAll() {
+            List<Especialidad> a = especialidadRepository.findAll();
+            List<EspecialidadDTO> b = new ArrayList<>();
+            for(Especialidad c : a){
+                b.add(convertirEspecialidadDTO(c));
+            }
+            return b;
+        }
+
+    public EspecialidadDTO byId(Long id) {
+            Especialidad a = especialidadRepository.findById(id)
+                    .orElseThrow(()-> new EntityNotFoundException("Especialidad"));
+            return convertirEspecialidadDTO(a);
+        }
 }

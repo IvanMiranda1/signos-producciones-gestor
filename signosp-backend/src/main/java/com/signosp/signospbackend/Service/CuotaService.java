@@ -1,5 +1,7 @@
 package com.signosp.signospbackend.Service;
 
+import com.signosp.signospbackend.Models.comentario.Comentario;
+import com.signosp.signospbackend.Models.comentario.ComentarioDTO;
 import com.signosp.signospbackend.Models.cuota.Cuota;
 import com.signosp.signospbackend.Models.cuota.CuotaDTO;
 import com.signosp.signospbackend.Models.cuota.CuotaId;
@@ -11,6 +13,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -57,4 +62,18 @@ public class CuotaService {
         return ResponseEntity.ok("Cuota eliminada");
     }
 
+    public CuotaDTO byId(Long id) {
+        Cuota a = cuotaRepository.findById(id)
+                .orElseThrow(()-> new EntityNotFoundException("No se encontro"));
+        return convertirCuotaDTO(a);
+    }
+
+    public List<CuotaDTO> findAll() {
+        List<Cuota> a = cuotaRepository.findAll();
+        List<CuotaDTO> b = new ArrayList<>();
+        for(Cuota c : a){
+            b.add(convertirCuotaDTO(c));
+        }
+        return b;
+    }
 }

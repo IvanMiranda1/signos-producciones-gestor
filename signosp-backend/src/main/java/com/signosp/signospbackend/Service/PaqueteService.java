@@ -10,6 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class PaqueteService {
@@ -64,4 +67,13 @@ public class PaqueteService {
     public void eliminarPaquete(Long id_paquete) {
         paqueteRepository.deleteById(id_paquete);
     }
+
+    public List<PaqueteDTO> findAll() {
+            List<Paquete> a = paqueteRepository.findAll();
+            List<PaqueteDTO> b = new ArrayList<>();
+            for(Paquete c : a){
+                b.add(convertirPaqueteDTO(c));
+            }
+            return b;
+        }
 }
