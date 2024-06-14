@@ -1,17 +1,18 @@
 package com.signosp.signospbackend.Models.pago;
 
+import com.signosp.signospbackend.Models.cuota.CuotaDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PagoDTO {
-    private Long id_pago;
-    private Long id_evento;
-    private String forma_de_pago;
-    private Integer cant_cuotas;
+public class PagoConCuotasDTO {
+    private PagoDTO pagoDTO;
+    private List<CuotaDTO> cuotas;
 }

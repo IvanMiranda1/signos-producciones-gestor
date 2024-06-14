@@ -4,11 +4,21 @@ import com.signosp.signospbackend.Models.categoria.Categoria;
 import com.signosp.signospbackend.Models.categoria.CategoriaRepository;
 import com.signosp.signospbackend.Models.cliente.Cliente;
 import com.signosp.signospbackend.Models.cliente.ClienteRepository;
+import com.signosp.signospbackend.Models.comentario.ComentarioDTO;
+import com.signosp.signospbackend.Models.empleado.Empleado;
+import com.signosp.signospbackend.Models.empleado.EmpleadoDTO;
+import com.signosp.signospbackend.Models.empleado.EmpleadoRepository;
 import com.signosp.signospbackend.Models.evento.Evento;
 import com.signosp.signospbackend.Models.evento.EventoDTO;
 import com.signosp.signospbackend.Models.evento.EventoRepository;
+import com.signosp.signospbackend.Models.evento_empleado.Evento_empleado;
+import com.signosp.signospbackend.Models.evento_empleado.Evento_empleadoDTO;
+import com.signosp.signospbackend.Models.evento_empleado.Evento_empleadoRepository;
+import com.signosp.signospbackend.Models.pago.PagoConCuotasDTO;
+import com.signosp.signospbackend.Models.pago.PagoDTO;
 import com.signosp.signospbackend.Models.paquete.Paquete;
 import com.signosp.signospbackend.Models.paquete.PaqueteRepository;
+import com.signosp.signospbackend.Models.subtarea.SubtareaDTO;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,6 +36,11 @@ public class EventoService {
     public final ClienteRepository clienteRepository;
     public final PaqueteRepository paqueteRepository;
     public final CategoriaRepository categoriaRepository;
+    public final Evento_empleadoService relacionService;
+    public final SubtareaService subtareaService;
+    public final PagoService pagoService;
+    public final ComentarioService comentarioService;
+
     public void crearEvento(EventoDTO eventoDTO) {
         Cliente cliente = clienteRepository.findById(eventoDTO.getId_cliente())
                 .orElseThrow(() -> new EntityNotFoundException("No se encontró el cliente con ID: " + eventoDTO.getId_cliente()));
@@ -111,4 +126,22 @@ public class EventoService {
                     .orElseThrow(()-> new EntityNotFoundException("Evento"));
             return convertirEventoDTO(a);
     }
+
+    public List<Evento_empleadoDTO> obtenerEmpleados(Long idEvento) {
+        return relacionService.findEmpleadosxEvento(idEvento);
+    } // Esta misma funcion tengo que hacerla con Paquete_material_de_entrega y con Evento_subtarea
+
+    public List<SubtareaDTO> obtenerSubtareas(Long idEvento) {
+        return subtareaService.findSubtareaXEvento(idEvento);
+    }
+
+    public PagoConCuotasDTO obtenerPagoDeEvento(Long idEvento) {
+        return pagoService.obtenerPagoDeEvento(idEvento);
+    }
+
+    public List<ComentarioDTO> comentariosDeEvento(Long idEvento){
+        return comentarioService.obtenerComentariosxIdEvento(idEvento);
+    }
+
+
 }

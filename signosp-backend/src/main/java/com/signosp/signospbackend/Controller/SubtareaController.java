@@ -1,6 +1,5 @@
 package com.signosp.signospbackend.Controller;
 
-import com.signosp.signospbackend.Models.subtarea.Subtarea;
 import com.signosp.signospbackend.Models.subtarea.SubtareaDTO;
 import com.signosp.signospbackend.Service.SubtareaService;
 import lombok.RequiredArgsConstructor;
@@ -14,26 +13,30 @@ import java.util.List;
 @RequestMapping("/api/subtarea")
 @RequiredArgsConstructor
 public class SubtareaController {
-    public SubtareaService subtareaService;
+    public final SubtareaService subtareaService;
 
     @GetMapping
-        public List<SubtareaDTO> getAllSubtareas(){
-            return subtareaService.findAll();
-        }
-        @GetMapping({"id"})
-        public SubtareaDTO subtareaById(@PathVariable Long id){
-            return subtareaService.byId(id);
-        }
-        @PostMapping
-        public void crearSubtarea(@RequestBody SubtareaDTO subtareaDTO){
-            subtareaService.crearSubtarea(subtareaDTO);
-        }
-        @PutMapping
-        public void modificarSubtarea(@RequestBody SubtareaDTO subtareaDTO){
-            subtareaService.modificarSubtarea(subtareaDTO);
-        }
-        @DeleteMapping
-        public void eliminarSubtarea(@PathVariable Long id){
-            subtareaService.eliminarSubtarea(id);
+    public List<SubtareaDTO> getAllSubtareas(){
+        return subtareaService.findAll();
+    }
+
+    @GetMapping("/{id}")
+    public SubtareaDTO subtareaById(@PathVariable Long id){
+        return subtareaService.byId(id);
+    }
+
+    @PostMapping
+    public void crearSubtarea(@RequestBody SubtareaDTO subtareaDTO){
+        subtareaService.crearSubtarea(subtareaDTO);
+    }
+
+    @PutMapping
+    public void modificarSubtarea(@RequestBody SubtareaDTO subtareaDTO){
+        subtareaService.modificarSubtarea(subtareaDTO);
+    }
+
+    @DeleteMapping
+    public void eliminarSubtarea(@PathVariable Long id){
+        subtareaService.eliminarSubtarea(id);
         }
 }

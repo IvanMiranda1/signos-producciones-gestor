@@ -26,7 +26,7 @@ public class AuthService {
 
     public AuthResponse login(LoginRequest request) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
-        System.out.println("2");
+        System.out.println("Login");
         UserDetails user = userRepository.findByUsername(request.getUsername()).orElseThrow(()-> new EntityNotFoundException("No se encontro"));
         return AuthResponse.builder()
                 .token(jwtService.getToken(user))

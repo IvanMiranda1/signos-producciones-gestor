@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class SubtareaDTO {
     private Long id_subtarea;
+    private Long id_evento;
     private String nombre;
     private Boolean estado;
 

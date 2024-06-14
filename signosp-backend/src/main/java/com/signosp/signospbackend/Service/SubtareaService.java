@@ -15,17 +15,21 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class SubtareaService {
-    public  final SubtareaRepository subtareaRepository;
+    public final SubtareaRepository subtareaRepository;
+
     public void crearSubtarea(SubtareaDTO subtareaDTO){
         Subtarea subtarea = Subtarea.builder()
+                .id_evento(subtareaDTO.getId_evento())
                 .nombre(subtareaDTO.getNombre())
                 .estado(subtareaDTO.getEstado())
                 .build();
         subtareaRepository.save(subtarea);
     }
+
     public SubtareaDTO convertirSubtareaDTO(Subtarea subtarea){
         return SubtareaDTO.builder()
                 .id_subtarea(subtarea.getId_subtarea())
+                .id_evento(subtarea.getId_evento())
                 .nombre(subtarea.getNombre())
                 .estado(subtarea.getEstado())
                 .build();
@@ -37,6 +41,7 @@ public class SubtareaService {
         }
         Subtarea subtareaMod = Subtarea.builder()
                 .id_subtarea(subtarea.getId_subtarea())
+                .id_evento(subtarea.getId_evento())
                 .nombre(subtareaDTO.getNombre()!=null? subtareaDTO.getNombre() : subtarea.getNombre())
                 .estado(subtareaDTO.getEstado()!= null? subtareaDTO.getEstado() : subtarea.getEstado())
                 .build();
@@ -61,4 +66,13 @@ public class SubtareaService {
                     .orElseThrow(()-> new EntityNotFoundException("Subtarea"));
             return convertirSubtareaDTO(a);
         }
+
+    public List<SubtareaDTO> findSubtareaXEvento(Long idEvento) {
+        List<Subtarea> list = subtareaRepository.findByIdEvento(idEvento);
+        List<SubtareaDTO> listDTO = new ArrayList<>();
+        for(Subtarea subtarea : list){
+            listDTO.add(convertirSubtareaDTO(subtarea));
+        }
+        return listDTO;
+    }
 }

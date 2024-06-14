@@ -14,13 +14,13 @@ import java.util.List;
 @RequestMapping("/api/disponibilidad")
 @RequiredArgsConstructor
 public class DisponibilidadController {
-    public DisponibilidadService disponibilidadService;
+    public final DisponibilidadService disponibilidadService;
 
     @GetMapping
     public List<DisponibilidadDTO> getAlldisponibilidads(){
         return disponibilidadService.findAll();
     }
-    @GetMapping({"id"})
+    @GetMapping("/{id}")
     public DisponibilidadDTO disponibilidadById(@PathVariable Long id){
         return disponibilidadService.byId(id);
     }

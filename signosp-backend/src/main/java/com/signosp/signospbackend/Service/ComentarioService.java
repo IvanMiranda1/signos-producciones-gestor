@@ -8,9 +8,7 @@ import com.signosp.signospbackend.Models.empleado.EmpleadoRepository;
 import com.signosp.signospbackend.Models.evento.Evento;
 import com.signosp.signospbackend.Models.evento.EventoRepository;
 import jakarta.persistence.EntityNotFoundException;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -24,6 +22,7 @@ public class ComentarioService {
     public final ComentarioRepository comentarioRepository;
     public final EventoRepository eventoRepository;
     public final EmpleadoRepository empleadoRepository;
+
     public void crearComentario(ComentarioDTO comentarioDTO) {
         Evento evento = eventoRepository.findById(comentarioDTO.getId_evento())
                 .orElseThrow(() -> new EntityNotFoundException("No se encontro el evento"));
@@ -75,4 +74,14 @@ public class ComentarioService {
     public ComentarioDTO byId(Long id){
         return convertirComentarioDTO(comentarioRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("no encontrado")));
     }
+
+    public List<ComentarioDTO> obtenerComentariosxIdEvento(Long idEvento) {
+        List<ComentarioDTO> listDTO = new ArrayList<>();
+        List<Comentario> list = comentarioRepository.findByIdEvento(idEvento);
+        for (Comentario c : list){
+            listDTO.add(convertirComentarioDTO(c));
+        }
+        return listDTO;
+    }
+
 }

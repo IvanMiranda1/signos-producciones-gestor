@@ -6,6 +6,7 @@ import com.signosp.signospbackend.Models.cuota.CuotaRepository;
 import com.signosp.signospbackend.Models.evento.Evento;
 import com.signosp.signospbackend.Models.evento.EventoRepository;
 import com.signosp.signospbackend.Models.pago.Pago;
+import com.signosp.signospbackend.Models.pago.PagoConCuotasDTO;
 import com.signosp.signospbackend.Models.pago.PagoDTO;
 import com.signosp.signospbackend.Models.pago.PagoRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -24,6 +25,7 @@ public class PagoService {
     public final EventoRepository eventoRepository;
     public final CuotaRepository cuotaRepository;
     public final CuotaService cuotaService;
+
     public void crearPago(PagoDTO pagoDTO) {
         Evento evento = eventoRepository.findById(pagoDTO.getId_evento())
                 .orElseThrow(() -> new EntityNotFoundException("No se encontró el evento con ID: " + pagoDTO.getId_evento()));
@@ -34,6 +36,7 @@ public class PagoService {
                 .build();
         pagoRepository.save(nuevoPago);
     }
+
     public ResponseEntity<String> modificarPago(PagoDTO pagoDTO){
         Pago pago = pagoRepository.findById(pagoDTO.getId_pago()).orElse(null);
         if(pago == null){
@@ -84,4 +87,15 @@ public class PagoService {
                     .orElseThrow(()-> new EntityNotFoundException("PagoDTO"));
             return convertirPagoDTO(a);
         }
+
+    public PagoConCuotasDTO obtenerPagoDeEvento(Long idEvento) {
+        Pago pago = pagoRepository.findByIdEvento(idEvento);
+        PagoDTO pagoDTO = convertirPagoDTO(pago);
+        List<CuotaDTO> listCuotas = cuotaService.cuotasDelPago(pago.getId_pago());
+        return PagoConCuotasDTO.builder()
+                .pagoDTO(pagoDTO)
+                .cuotas(listCuotas)
+                .build();
+    }
+
 }

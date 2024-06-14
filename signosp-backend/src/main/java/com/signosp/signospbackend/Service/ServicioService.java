@@ -16,12 +16,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ServicioService {
     public final ServicioRepository servicioRepository;
+
     public void crearServicio(ServicioDTO servicioDTO) {
         Servicio nuevoServicio = Servicio.builder()
             .nombre(servicioDTO.getNombre())
             .build();
         servicioRepository.save(nuevoServicio);
     }
+
     public ResponseEntity modificarServicio(ServicioDTO servicioDTO){
         Servicio servicio = servicioRepository.findById(servicioDTO.getId_servicio()).orElse(null);
         if(servicio == null){
@@ -57,4 +59,20 @@ public class ServicioService {
                     .orElseThrow(()-> new EntityNotFoundException("Servicio"));
             return convertirServicioDTO(a);
         }
+
+    public List<ServicioDTO> findServiciosXidPaquete(Long idPaquete) {
+        List<Long> listIds = servicioRepository.findServiciosXidPaquete(idPaquete);
+        List<ServicioDTO> listServicio = new ArrayList<>();
+        for(Long id : listIds){
+            Servicio s = servicioRepository.findById(id).orElse(null);
+            if(s != null){
+                listServicio.add(convertirServicioDTO(s));
+            }
+        }
+        return listServicio;
+    }
+
+    public Servicio findById(Long idServicio) {
+        return servicioRepository.findById(idServicio).orElseThrow(()-> new EntityNotFoundException("No se encontro el servicio"));
+    }
 }

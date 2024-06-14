@@ -42,12 +42,6 @@ CREATE TABLE public.categoria (
     nombre varchar(100)
 );
 
-CREATE TABLE public.subtarea(
-    id_subtarea BIGSERIAL PRIMARY KEY,
-    nombre varchar(255),
-    estado boolean
-);
-
 CREATE TABLE public.paquete(
     id_paquete BIGSERIAL PRIMARY KEY,
     nombre varchar(255),
@@ -67,14 +61,13 @@ CREATE TABLE public.paquete_servicio(
 
 CREATE TABLE public.material_de_entrega(
     id_material_de_entrega BIGSERIAL PRIMARY KEY,
-    id_paquete BIGINT NOT NULL REFERENCES paquete(id_paquete),
-    nombre varchar(255),
-    cantidad integer
+    nombre varchar(255)
 );
-
-CREATE TABLE public.paquete_material_de_entrega (
-    id_paquete BIGINT NOT NULL REFERENCES paquete(id_paquete),
-    id_material_de_entrega BIGINT NOT NULL REFERENCES material_de_entrega(id_material_de_entrega)
+CREATE TABLE public.paquete_material_de_entrega(
+	id_paquete_material_de_entrega BIGSERIAL PRIMARY KEY,
+	id_paquete BIGINT NOT NULL REFERENCES paquete(id_paquete),
+	id_material_de_entrega BIGINT NOT NULL REFERENCES material_de_entrega(id_material_de_entrega),
+	cantidad integer
 );
 
 CREATE TABLE public.evento(
@@ -87,14 +80,10 @@ CREATE TABLE public.evento(
 );
 
 CREATE TABLE public.evento_empleado(
+	id_evento_empleado BIGSERIAL PRIMARY KEY,
     id_evento BIGINT REFERENCES evento(id_evento),
     id_empleado BIGINT REFERENCES empleado(id_empleado),
     fecha_trabajada date
-);
-
-CREATE TABLE public.evento_subtareas (
-    id_evento BIGINT REFERENCES evento(id_evento),
-    id_subtarea BIGINT REFERENCES subtarea(id_subtarea)
 );
 
 CREATE TABLE public.comentario (
@@ -104,16 +93,18 @@ CREATE TABLE public.comentario (
     contenido varchar(500)
 );
 
-CREATE TABLE public.evento_comentario (
-    id_evento BIGINT REFERENCES evento(id_evento),
-    id_comentario BIGINT REFERENCES comentario(id_comentario)
+CREATE TABLE public.subtarea(
+    id_subtarea BIGSERIAL PRIMARY KEY,
+    id_evento BIGINT NOT NULL REFERENCES evento(id_evento),
+    nombre varchar(255),
+    estado boolean
 );
 
 CREATE TABLE public.pago (
     id_pago BIGSERIAL PRIMARY KEY,
     id_evento BIGINT NOT NULL REFERENCES evento(id_evento),
     forma_de_pago varchar(10),
-    cant_coutas integer
+    cant_cuotas integer
 );
 
 CREATE TABLE public.cuota (

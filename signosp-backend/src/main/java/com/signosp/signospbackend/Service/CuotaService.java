@@ -1,7 +1,5 @@
 package com.signosp.signospbackend.Service;
 
-import com.signosp.signospbackend.Models.comentario.Comentario;
-import com.signosp.signospbackend.Models.comentario.ComentarioDTO;
 import com.signosp.signospbackend.Models.cuota.Cuota;
 import com.signosp.signospbackend.Models.cuota.CuotaDTO;
 import com.signosp.signospbackend.Models.cuota.CuotaId;
@@ -22,12 +20,20 @@ import java.util.List;
 public class CuotaService {
     public final CuotaRepository cuotaRepository;
     public final PagoRepository pagoRepository;
+
     public void crearCuota(CuotaDTO cuotaDTO) {
         Pago pago = pagoRepository.findById(cuotaDTO.getId_pago())
                 .orElseThrow(()-> new EntityNotFoundException("No se encontro el pago con id"+ cuotaDTO.getId_cuota()));
-        CuotaId cuotaId = new CuotaId(pago, cuotaDTO.getNroCuota());
+        Long numCuotasRegistradas = cuotaRepository.coutByPagoId(cuotaDTO.getId_pago());
+        if(numCuotasRegistradas >= pago.getCant_cuotas()){
+            throw new IllegalStateException("No se puede registrar mas cuotas para este pago porque ya se ha alcanzado el maximo");
+        }
+        CuotaId cuotaId = CuotaId.builder()
+                .pago(pago)
+                .nroCuota(cuotaDTO.getNro_cuota())
+                .build();
         Cuota nuevaCuota = Cuota.builder()
-                .nro_cuota(cuotaDTO.getNroCuota())
+                .nro_cuota(cuotaDTO.getNro_cuota())
                 .monto(cuotaDTO.getMonto())
                 .fecha_de_pago(cuotaDTO.getFecha_de_pago())
                 .pago(pago)
@@ -35,6 +41,7 @@ public class CuotaService {
                 .build();
         cuotaRepository.save(nuevaCuota);
     }
+
     public ResponseEntity<String> modificarMontoCuota(CuotaDTO cuotaDTO){
         Cuota cuota = cuotaRepository.findById(cuotaDTO.getId_pago()).orElse(null);
         if(cuota == null){
@@ -53,6 +60,7 @@ public class CuotaService {
                 .id_cuota(cuota.getId_cuota())
                 .id_pago(cuota.getPago().getId_pago())
                 .monto(cuota.getMonto())
+                .nro_cuota(cuota.getNro_cuota())
                 .fecha_de_pago(cuota.getFecha_de_pago())
                 .build();
     }
@@ -75,5 +83,14 @@ public class CuotaService {
             b.add(convertirCuotaDTO(c));
         }
         return b;
+    }
+
+    public List<CuotaDTO> cuotasDelPago(Long idPago) {
+        List<Cuota> list = cuotaRepository.listCuotasByIdPago(idPago);
+        List<CuotaDTO> listDTO = new ArrayList<>();
+        for(Cuota c : list){
+            listDTO.add(convertirCuotaDTO(c));
+        }
+        return listDTO;
     }
 }

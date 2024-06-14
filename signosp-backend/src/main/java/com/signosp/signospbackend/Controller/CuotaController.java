@@ -18,7 +18,7 @@ public class CuotaController {
     public List<CuotaDTO> getAllcuotas(){
         return cuotaService.findAll();
     }
-    @GetMapping({"id"})
+    @GetMapping("/{id}")
     public CuotaDTO cuotaById(@PathVariable Long id){
         return cuotaService.byId(id);
     }
@@ -34,4 +34,6 @@ public class CuotaController {
     public void eliminarcuota(@PathVariable Long id){
         cuotaService.eliminarCuota(id);
     }
+
+
 }

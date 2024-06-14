@@ -19,7 +19,7 @@ public class EspecialidadController {
         public List<EspecialidadDTO> getAllEspecialidads(){
             return especialidadService.findAll();
         }
-        @GetMapping({"id"})
+        @GetMapping("/{id}")
         public EspecialidadDTO especialidadById(@PathVariable Long id){
             return especialidadService.byId(id);
         }

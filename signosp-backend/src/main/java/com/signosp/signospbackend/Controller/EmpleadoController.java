@@ -19,7 +19,7 @@ public class EmpleadoController {
         public List<EmpleadoDTO> getAllEmpleados(){
             return empleadoService.findAll();
         }
-        @GetMapping({"id"})
+        @GetMapping("/{id}")
         public EmpleadoDTO empleadoById(@PathVariable Long id){
             return empleadoService.byId(id);
         }

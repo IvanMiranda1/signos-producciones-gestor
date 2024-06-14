@@ -18,7 +18,7 @@ public class  Material_de_entregaController {
         public List<Material_de_entregaDTO> getAllMaterial_de_entregas(){
             return material_de_entregaService.findAll();
         }
-        @GetMapping({"id"})
+        @GetMapping("/{id}")
         public Material_de_entregaDTO material_de_entregaById(@PathVariable Long id){
             return material_de_entregaService.byId(id);
         }

@@ -13,7 +13,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DisponibilidadDTO {
+public class
+DisponibilidadDTO {
     private Long id_disponibilidad;
     private Long id_empleado;
     private String dia;

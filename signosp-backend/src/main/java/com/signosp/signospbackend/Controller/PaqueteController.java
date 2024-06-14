@@ -1,8 +1,6 @@
 package com.signosp.signospbackend.Controller;
 
-import com.signosp.signospbackend.Models.paquete.Paquete;
-import com.signosp.signospbackend.Models.paquete.PaqueteDTO;
-import com.signosp.signospbackend.Models.paquete.PaqueteRepository;
+import com.signosp.signospbackend.Models.paquete.*;
 import com.signosp.signospbackend.Service.PaqueteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -42,5 +40,18 @@ public class PaqueteController {
     @DeleteMapping
     public void eliminarCliente(@PathVariable Long id_paquete){
         paqueteService.eliminarPaquete(id_paquete);
+    }
+    @GetMapping("/completo/{id_paquete}")
+    public PaqueteMDEyServiciosDTO paqueteCompleto(@PathVariable Long id_paquete){
+        return paqueteService.paqueteCompleto(id_paquete);
+    }
+    @PostMapping("/asignar")
+    public void asignarServicios(@RequestBody ServicioXPaqueteDTO servicioXPaqueteDTO){
+        paqueteService.asignarServicio(servicioXPaqueteDTO);
+    }
+
+    @DeleteMapping("/{paqueteId}/servicio/{servicioId}")
+    public void eliminarRelacion(@PathVariable Long paqueteId, @PathVariable Long servicioId) {
+        paqueteService.eliminarRelacion(paqueteId, servicioId);
     }
 }

@@ -19,5 +19,4 @@ public class CuotaId implements Serializable {
     private Pago pago;
     @Column(name = "nro_cuota")
     private Integer nroCuota;
-
 }

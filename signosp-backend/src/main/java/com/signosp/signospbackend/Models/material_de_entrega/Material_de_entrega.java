@@ -17,12 +17,7 @@ public class Material_de_entrega {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_material_de_entrega;
-    @ManyToOne
-    @JoinColumn(name="id_paquete")
-    private Paquete paquete;
     @Column(name = "nombre")
     private String nombre;
-    @Column(name = "cantidad")
-    private String cantidad;
 
 }

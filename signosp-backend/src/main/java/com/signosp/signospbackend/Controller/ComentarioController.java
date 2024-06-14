@@ -10,15 +10,17 @@ import java.util.List;
 @RequestMapping("/api/comentario")
 @RequiredArgsConstructor
 public class ComentarioController {
-    public ComentarioService comentarioService;
+    public final ComentarioService comentarioService;
+
     @GetMapping
     public List<ComentarioDTO> getAllComentarios(){
         return comentarioService.findAll();
     }
-    @GetMapping({"id"})
+    @GetMapping("/{id}")
     public ComentarioDTO comentarioById(@PathVariable Long id){
         return comentarioService.byId(id);
     }
+
     @PostMapping
     public void crearComentario(@RequestBody ComentarioDTO comentarioDTO){
         comentarioService.crearComentario(comentarioDTO);

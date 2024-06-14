@@ -22,21 +22,16 @@ public class Material_de_entregaService {
     public final PaqueteRepository paqueteRepository;
 
     public void crearMaterialDeEntrega(Material_de_entregaDTO materialDeEntregaDTO){
-        Paquete paquete = paqueteRepository.findById(materialDeEntregaDTO.getId_paquete())
-                .orElseThrow(()-> new EntityNotFoundException("No se encontro el paquete"));
         Material_de_entrega materialDeEntrega = Material_de_entrega.builder()
-                .paquete(paquete)
                 .nombre(materialDeEntregaDTO.getNombre())
-                .cantidad(materialDeEntregaDTO.getCantidad())
                 .build();
         materialDeEntregaRepository.save(materialDeEntrega);
     }
 
     public Material_de_entregaDTO convertirMDEDTO(Material_de_entrega materialDeEntrega){
         return Material_de_entregaDTO.builder()
-                .id_paquete(materialDeEntrega.getPaquete().getId_paquete())
+                .id_material_de_entrega(materialDeEntrega.getId_material_de_entrega())
                 .nombre(materialDeEntrega.getNombre())
-                .cantidad(materialDeEntrega.getCantidad())
                 .build();
     }
 
@@ -45,13 +40,10 @@ public class Material_de_entregaService {
         if(materialDeEntrega==null){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontro el material de entrega");
         }
-        Paquete paquete = paqueteRepository.findById(materialDeEntregaDTO.getId_paquete())
-                .orElseThrow(()-> new EntityNotFoundException("No se encontro el paquete"));
+
         Material_de_entrega materialMod = Material_de_entrega.builder()
                 .id_material_de_entrega(materialDeEntrega.getId_material_de_entrega())
-                .paquete(materialDeEntregaDTO.getId_paquete() != null ? paquete : materialDeEntrega.getPaquete())
                 .nombre(materialDeEntregaDTO.getNombre() != null ? materialDeEntregaDTO.getNombre() : materialDeEntrega.getNombre())
-                .cantidad(materialDeEntregaDTO.getCantidad() != null? materialDeEntregaDTO.getCantidad() : materialDeEntrega.getCantidad())
                 .build();
         materialDeEntregaRepository.save(materialMod);
         return ResponseEntity.ok("Material de entrega modificado");

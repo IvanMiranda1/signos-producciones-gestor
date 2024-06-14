@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 @Data
@@ -26,5 +27,6 @@ public class Evento_empleado {
     @JoinColumn(name="id_empleado")
     private Empleado empleado;
     @Column(name="fecha_trabajada")
+    @DateTimeFormat(pattern="dd/MM/yyyy")
     private Date fecha_trabajada;
 }

@@ -19,6 +19,7 @@ import java.util.List;
 public class DisponibilidadService {
     public final EmpleadoRepository empleadoRepository;
     public final DisponibilidadRepository disponibilidadRepository;
+
     public void crearDisponibilidad(DisponibilidadDTO disponibilidadDTO) {
         Empleado empleado = empleadoRepository.findById(disponibilidadDTO.getId_empleado())
                 .orElseThrow(() -> new EntityNotFoundException("No se encontró el empleado con ID: " + disponibilidadDTO.getId_empleado()));

@@ -1,7 +1,6 @@
 package com.signosp.signospbackend.Service;
 
 import com.signosp.signospbackend.Models.empleado.Empleado;
-import com.signosp.signospbackend.Models.empleado.EmpleadoDTO;
 import com.signosp.signospbackend.Models.empleado.EmpleadoRepository;
 import com.signosp.signospbackend.Models.evento.Evento;
 import com.signosp.signospbackend.Models.evento.EventoRepository;
@@ -14,12 +13,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class Evento_empleadoService {
     public final Evento_empleadoRepository eventoEmpleadoRepository;
     public final EventoRepository eventoRepository;
     public final EmpleadoRepository empleadoRepository;
+
     public void crearEvento_empleado(Evento_empleadoDTO evento_empleadoDTO) {
         Evento evento = eventoRepository.findById(evento_empleadoDTO.getId_evento())
                 .orElseThrow(() -> new EntityNotFoundException("No se encontró el evento con ID: " + evento_empleadoDTO.getId_evento()));
@@ -54,6 +57,15 @@ public class Evento_empleadoService {
                 .build();
         eventoEmpleadoRepository.save(fechaNueva);
         return ResponseEntity.ok("Fecha modificada");
+    }
+
+    public List<Evento_empleadoDTO> findEmpleadosxEvento(Long id_evento){
+         List<Evento_empleado> recs = eventoEmpleadoRepository.findEmpleadosxEvento(id_evento);
+         List<Evento_empleadoDTO> recsDTO = new ArrayList<>();
+         for(Evento_empleado r : recs){
+             recsDTO.add(convertirRelacionDTO(r));
+         }
+         return recsDTO;
     }
 
     //La relacion deberia eliminarse cuando elimino el evento o empleado....

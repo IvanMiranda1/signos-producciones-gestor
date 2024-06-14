@@ -14,4 +14,7 @@ public interface CuotaRepository extends JpaRepository<Cuota, Long> {
 
     @Query(value = "DELETE FROM Cuota c WHERE c.pago.id_pago = :id_pago")
     void deleteByIdPago(@Param("id_pago") Long id_pago);
+
+    @Query("SELECT COUNT(c) FROM Cuota c WHERE c.pago.id_pago = :id_pago")
+    Long coutByPagoId(@Param("id_pago") Long idPago);
 }

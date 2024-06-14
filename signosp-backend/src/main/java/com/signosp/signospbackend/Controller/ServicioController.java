@@ -19,7 +19,7 @@ public class ServicioController {
         public List<ServicioDTO> getAllServicios(){
             return servicioService.findAll();
         }
-        @GetMapping({"id"})
+        @GetMapping("/{id}")
         public ServicioDTO servicioById(@PathVariable Long id){
             return servicioService.byId(id);
         }

@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 @Data
@@ -14,8 +15,9 @@ import java.util.Date;
 public class CuotaDTO {
     private CuotaId id_cuota;
     private Long id_pago;
-    private Integer nroCuota;
+    private Integer nro_cuota;
     private Float monto;
+    @DateTimeFormat(pattern="dd/MM/yyyy")
     private Date fecha_de_pago;
 
 }

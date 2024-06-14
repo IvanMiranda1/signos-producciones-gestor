@@ -16,9 +16,11 @@ public class Subtarea {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_subtarea;
+    @Column(name = "id_evento")
+    private Long id_evento;
     @Column(name = "nombre")
     private String nombre;
     @Column(name = "estado")
     private Boolean estado;
-
+//Subtarea le falta estar relacionada a un evento, tengo que hacerlo como en Material de entrega, asociada a un paquete
 }
