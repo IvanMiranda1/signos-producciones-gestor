@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +26,8 @@ public class DisponibilidadService {
                 .orElseThrow(() -> new EntityNotFoundException("No se encontró el empleado con ID: " + disponibilidadDTO.getId_empleado()));
         Disponibilidad nuevaDisponibilidad = Disponibilidad.builder()
                 .dia(disponibilidadDTO.getDia())
-                .horario(disponibilidadDTO.getHorario())
+                .desde(disponibilidadDTO.getDesde())
+                .hasta(disponibilidadDTO.getHasta())
                 .empleado(empleado)
                 .build();
         disponibilidadRepository.save(nuevaDisponibilidad);
@@ -35,20 +37,24 @@ public class DisponibilidadService {
         return DisponibilidadDTO.builder()
                 .id_disponibilidad(disponibilidad.getId_disponibilidad())
                 .dia(disponibilidad.getDia())
-                .horario(disponibilidad.getHorario())
+                .desde(disponibilidad.getDesde())
+                .hasta(disponibilidad.getHasta())
                 .id_empleado(disponibilidad.getEmpleado().getId_empleado())
                 .build();
     }
 
     public ResponseEntity<String> modificarDisponibilidad(DisponibilidadDTO disponibilidadDTO){
-        Disponibilidad disponibilidad = disponibilidadRepository.findById(disponibilidadDTO.getId_disponibilidad()).orElse(null);
-        if(disponibilidad == null){
+        Optional<Disponibilidad> optionalDisponibilidad = disponibilidadRepository.findById(disponibilidadDTO.getId_disponibilidad());
+        if(!optionalDisponibilidad.isPresent()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontro la disponibilidad");
         }
+        Disponibilidad disponibilidad = optionalDisponibilidad.get();
+
         Disponibilidad disponibilidadModificada = Disponibilidad.builder()
                 .id_disponibilidad(disponibilidad.getId_disponibilidad())
                 .dia(disponibilidadDTO.getDia() != null ? disponibilidadDTO.getDia() : disponibilidad.getDia())
-                .horario(disponibilidadDTO.getHorario() != null ? disponibilidadDTO.getHorario() : disponibilidad.getHorario())
+                .desde(disponibilidadDTO.getDesde() != null ? disponibilidadDTO.getDesde() : disponibilidad.getDesde())
+                .hasta(disponibilidad.getHasta() != null ? disponibilidadDTO.getHasta() : disponibilidad.getHasta())
                 .build();
         disponibilidadRepository.save(disponibilidadModificada);
         return ResponseEntity.ok("Disponibilidad modificada");
@@ -71,5 +77,14 @@ public class DisponibilidadService {
         Disponibilidad a = disponibilidadRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Disponibilidad"));
         return convertirDisponibilidadDTO(a);
+    }
+
+    public List<DisponibilidadDTO> disponibilidadxidEmpleado(Long id) {
+        List<Disponibilidad> dispXEmpleados = disponibilidadRepository.findByIdEmpleado(id);
+        List<DisponibilidadDTO> list = new ArrayList<>();
+        for(Disponibilidad d : dispXEmpleados){
+            list.add(convertirDisponibilidadDTO(d));
+        }
+        return list;
     }
 }

@@ -7,6 +7,8 @@ import com.signosp.signospbackend.Models.empleado.Empleado;
 import com.signosp.signospbackend.Models.empleado.EmpleadoRepository;
 import com.signosp.signospbackend.Models.evento.Evento;
 import com.signosp.signospbackend.Models.evento.EventoRepository;
+import com.signosp.signospbackend.User.User;
+import com.signosp.signospbackend.User.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,23 +17,24 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class ComentarioService {
     public final ComentarioRepository comentarioRepository;
     public final EventoRepository eventoRepository;
-    public final EmpleadoRepository empleadoRepository;
+    public final UserRepository userRepository;
 
     public void crearComentario(ComentarioDTO comentarioDTO) {
         Evento evento = eventoRepository.findById(comentarioDTO.getId_evento())
                 .orElseThrow(() -> new EntityNotFoundException("No se encontro el evento"));
-        Empleado empleado = empleadoRepository.findById(comentarioDTO.getId_empleado())
-                .orElseThrow(() -> new EntityNotFoundException("No se encontro el empleado"));
+        User usuario = userRepository.findById(comentarioDTO.getId_usuario())
+                .orElseThrow(() -> new EntityNotFoundException("No se encontro el usuario"));
         Comentario nuevoComentario = Comentario.builder()
                         .contenido(comentarioDTO.getContenido())
                         .evento(evento)
-                        .empleado(empleado)
+                        .usuario(usuario)
                         .build();
         comentarioRepository.save(nuevoComentario);
     }
@@ -41,18 +44,20 @@ public class ComentarioService {
                 .id_comentario(comentario.getId_comentario())
                 .contenido(comentario.getContenido())
                 .id_evento(comentario.getEvento().getId_evento())
-                .id_empleado(comentario.getEmpleado().getId_empleado())
+                .id_usuario(comentario.getUsuario().getId_usuario())
                 .build();
     }
 
     public ResponseEntity<String> modificarcomentario(ComentarioDTO comentarioDTO){
-        Comentario comentario = comentarioRepository.findById(comentarioDTO.getId_comentario()).orElse(null);
-        if(comentario == null) {
+        Optional<Comentario> optionalComentario = comentarioRepository.findById(comentarioDTO.getId_comentario());
+        if(!optionalComentario.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("ID de comentario no encontrado");
         }
+        Comentario comentario = optionalComentario.get();
+
         Comentario comentarioModificado = Comentario.builder()
                 .id_comentario(comentario.getId_comentario())
-                .contenido(comentario.getContenido())
+                .contenido(comentarioDTO.getContenido() != null ? comentarioDTO.getContenido() : comentario.getContenido())
                 .build();
         comentarioRepository.save(comentarioModificado);
         return ResponseEntity.ok("comentario modificado");

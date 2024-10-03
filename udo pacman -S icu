@@ -1,0 +1,14 @@
+[0;1;31m×[0m postgresql.service - PostgreSQL database server
+     Loaded: loaded (]8;;file://ivan-maxl5/usr/lib/systemd/system/postgresql.service/usr/lib/systemd/system/postgresql.service]8;;; [0;1;38;5;185mdisabled[0m; preset: [0;1;38;5;185mdisabled[0m)
+     Active: [0;1;31mfailed[0m (Result: exit-code) since Fri 2024-09-27 13:06:21 -03; 1min 23s ago
+       Docs: ]8;;man:postgres(1)man:postgres(1)]8;;
+    Process: 1371 ExecStartPre=/usr/bin/postgresql-check-db-dir ${PGROOT}/data (code=exited, status=0/SUCCESS)
+    Process: 1378 ExecStart=/usr/bin/postgres -D ${PGROOT}/data [0;1;31m(code=exited, status=127)[0m
+   Main PID: 1378 (code=exited, status=127)
+        CPU: 49ms
+
+sep 27 13:06:21 ivan-maxl5 systemd[1]: Starting PostgreSQL database server...
+sep 27 13:06:21 ivan-maxl5 postgres[1378]: /usr/bin/postgres: error while loading shared libraries: libicui18n.so.75: cannot open shared object file: No such file or directory
+sep 27 13:06:21 ivan-maxl5 systemd[1]: [0;1;39m[0;1;31m[0;1;39mpostgresql.service: Main process exited, code=exited, status=127/n/a[0m
+sep 27 13:06:21 ivan-maxl5 systemd[1]: [0;1;38;5;185m[0;1;39m[0;1;38;5;185mpostgresql.service: Failed with result 'exit-code'.[0m
+sep 27 13:06:22 ivan-maxl5 systemd[1]: [0;1;31m[0;1;39m[0;1;31mFailed to start PostgreSQL database server.[0m

@@ -1,5 +1,7 @@
 package com.signosp.signospbackend.Models.cuota;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.signosp.signospbackend.Models.pago.Pago;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -27,7 +29,8 @@ public class Cuota {
     @Column(name="monto")
     private Float monto;
     @Column(name="fecha_de_pago")
-    @DateTimeFormat(pattern="dd/MM/yyyy")
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date fecha_de_pago;
 
 }

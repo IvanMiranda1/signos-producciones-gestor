@@ -13,6 +13,6 @@ public class ComentarioDTO {
     private Long id_comentario;
     private String contenido;
     private Long id_evento;
-    private Long id_empleado;
+    private Long id_usuario;
 
 }

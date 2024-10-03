@@ -4,6 +4,7 @@ import com.signosp.signospbackend.Models.comentario.ComentarioDTO;
 import com.signosp.signospbackend.Models.cuota.CuotaDTO;
 import com.signosp.signospbackend.Service.CuotaService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -38,10 +39,12 @@ public class PagoService {
     }
 
     public ResponseEntity<String> modificarPago(PagoDTO pagoDTO){
-        Pago pago = pagoRepository.findById(pagoDTO.getId_pago()).orElse(null);
-        if(pago == null){
+        Optional<Pago> optionalPago = pagoRepository.findById(pagoDTO.getId_pago());
+        if(!optionalPago.isPresent()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encuentra el pago");
         }
+        Pago pago = optionalPago.get();
+
         Pago pagoModificado = Pago.builder()
                 .id_pago(pago.getId_pago())
                 .forma_de_pago(pagoDTO.getForma_de_pago() != null? pagoDTO.getForma_de_pago() : pago.getForma_de_pago())
@@ -98,4 +101,8 @@ public class PagoService {
                 .build();
     }
 
+    public PagoDTO findById(Long idEvento) {
+        Pago pago = pagoRepository.findByIdEvento(idEvento);
+        return convertirPagoDTO(pago);
+    }
 }

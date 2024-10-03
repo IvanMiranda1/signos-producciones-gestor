@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+
 @Table(name = "disponibilidad")
 public class Disponibilidad {
     @Id
@@ -22,6 +23,8 @@ public class Disponibilidad {
     private Empleado empleado;
     @Column(name = "dia")
     private String dia;
-    @Column(name = "horario")
-    private Integer horario; // Representa la hora en formato militar (ej. "0930" para las 09:30 AM)
+    @Column(name = "desde")
+    private Integer desde; // Representa la hora en formato militar (ej. "0930" para las 09:30 AM)
+    @Column(name = "hasta")
+    private Integer hasta; // Representa la hora en formato militar (ej. "0930" para las 09:30 AM)
 }

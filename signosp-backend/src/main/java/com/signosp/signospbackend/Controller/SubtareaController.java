@@ -34,8 +34,12 @@ public class SubtareaController {
     public void modificarSubtarea(@RequestBody SubtareaDTO subtareaDTO){
         subtareaService.modificarSubtarea(subtareaDTO);
     }
+    @PutMapping("/terminar/{id}")
+    public void terminarSubtarea(@PathVariable Long id){
+        subtareaService.terminarSubtarea(id);
+    }
 
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     public void eliminarSubtarea(@PathVariable Long id){
         subtareaService.eliminarSubtarea(id);
         }

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -36,10 +37,11 @@ public class Material_de_entregaService {
     }
 
     public ResponseEntity<String> modificarMaterialDeEntrega(Material_de_entregaDTO materialDeEntregaDTO){
-        Material_de_entrega materialDeEntrega = materialDeEntregaRepository.findById(materialDeEntregaDTO.getId_material_de_entrega()).orElse(null);
-        if(materialDeEntrega==null){
+        Optional<Material_de_entrega> optionalMaterialDeEntrega = materialDeEntregaRepository.findById(materialDeEntregaDTO.getId_material_de_entrega());
+        if(!optionalMaterialDeEntrega.isPresent()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontro el material de entrega");
         }
+        Material_de_entrega materialDeEntrega = optionalMaterialDeEntrega.get();
 
         Material_de_entrega materialMod = Material_de_entrega.builder()
                 .id_material_de_entrega(materialDeEntrega.getId_material_de_entrega())
@@ -49,8 +51,14 @@ public class Material_de_entregaService {
         return ResponseEntity.ok("Material de entrega modificado");
     }
 
-    public void eliminarMDE(Long id_material){
-        materialDeEntregaRepository.deleteById(id_material);
+    public ResponseEntity<String> eliminarMDE(Long id_material){
+        List<Object> listMDE = paqueteRepository.findByIdMaterial(id_material);
+        if (listMDE.isEmpty()){
+            materialDeEntregaRepository.deleteById(id_material);
+            return ResponseEntity.ok("Material de entrega eliminado exitosamente.");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se elimino.\nMaterial asociado a un paquete.");
+        }
     }
 
 

@@ -5,6 +5,7 @@ import com.signosp.signospbackend.Models.cliente.ClienteDTO;
 import com.signosp.signospbackend.Models.cliente.ClienteRepository;
 import com.signosp.signospbackend.Service.ClienteService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,6 +31,10 @@ public class ClienteController {
         return clienteService.getClienteById(id);
     }
 
+    @PostMapping("/existe")
+    public ResponseEntity<?> existeCliente(@RequestBody ClienteDTO clienteDTO){
+        return clienteService.existeCliente(clienteDTO);
+    }
     @PostMapping
     public void crearCliente(@RequestBody ClienteDTO nuevoCliente){
         clienteService.crearCliente(nuevoCliente);
@@ -38,9 +43,9 @@ public class ClienteController {
     public void modificarCliente(@RequestBody ClienteDTO cliente){
         clienteService.modificarCliente(cliente);
     }
-    @DeleteMapping
-    public void eliminarCliente(@PathVariable Long id_cliente){
-        clienteService.eliminarCliente(id_cliente);
+    @DeleteMapping("/{id_cliente}")
+    public ResponseEntity<String> eliminarCliente(@PathVariable Long id_cliente){
+        return clienteService.eliminarCliente(id_cliente);
     }
 
     @GetMapping("/compClient")

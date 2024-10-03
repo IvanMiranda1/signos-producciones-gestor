@@ -1,5 +1,6 @@
 package com.signosp.signospbackend.Auth;
 
+import com.signosp.signospbackend.User.UserDTO;
 import com.signosp.signospbackend.User.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -24,5 +25,17 @@ public class AuthController {
     @PostMapping(value = "validate")
     public ResponseEntity<ResponseEntity<String>> isValid(@RequestBody AuthResponse request){
         return ResponseEntity.ok(authService.isValid(request.getToken()));
+    }
+    @PostMapping("/forgot-password")
+    public ResponseEntity<AuthResponse> newPassword(@RequestBody LoginRequest request){
+        return ResponseEntity.ok(authService.changePassword(request));
+    }
+    @PostMapping("/user")
+    public ResponseEntity<UserDTO> usernameFromToken (@RequestBody AuthResponse request){
+        return authService.userFromToken(request.getToken());
+    }
+    @PostMapping("/getRole")
+    public ResponseEntity<String> getRole (@RequestBody AuthResponse request){
+        return authService.getRole(request.getToken());
     }
 }

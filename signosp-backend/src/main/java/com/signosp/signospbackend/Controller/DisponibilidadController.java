@@ -22,8 +22,15 @@ public class DisponibilidadController {
     }
     @GetMapping("/{id}")
     public DisponibilidadDTO disponibilidadById(@PathVariable Long id){
+
         return disponibilidadService.byId(id);
     }
+    @GetMapping("/empleado/{id}")
+    public List<DisponibilidadDTO> disponibilidadxEmpleado(@PathVariable Long id){
+        return disponibilidadService.disponibilidadxidEmpleado(id);
+    }
+
+
     @PostMapping
     public void creardisponibilidad(@RequestBody DisponibilidadDTO disponibilidadDTO){
         disponibilidadService.crearDisponibilidad(disponibilidadDTO);
@@ -36,4 +43,6 @@ public class DisponibilidadController {
     public void eliminardisponibilidad(@PathVariable Long id){
         disponibilidadService.eliminarDisponibilidad(id);
     }
+
+
 }

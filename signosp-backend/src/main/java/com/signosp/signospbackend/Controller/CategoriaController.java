@@ -3,9 +3,11 @@ package com.signosp.signospbackend.Controller;
 import com.signosp.signospbackend.Models.categoria.Categoria;
 import com.signosp.signospbackend.Models.categoria.CategoriaDTO;
 import com.signosp.signospbackend.Models.categoria.CategoriaRepository;
+import com.signosp.signospbackend.Models.evento.EventoRepository;
 import com.signosp.signospbackend.Service.CategoriaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,6 +16,7 @@ import java.util.List;
 @RequestMapping("/api/categoria")
 @RequiredArgsConstructor
 public class CategoriaController {
+
     public final CategoriaService categoriaService;
 
     @GetMapping
@@ -32,9 +35,9 @@ public class CategoriaController {
     public void modificarCategoria(@RequestBody CategoriaDTO categoriaDTO){
         categoriaService.modificarCategoria(categoriaDTO);
     }
-    @DeleteMapping
-    public void deleteCategoria(@PathVariable Long id) {
-        categoriaService.eliminarCategoria(id);
+    @DeleteMapping("/{id_categoria}")
+    public ResponseEntity<String> eliminarCategoria(@PathVariable Long id_categoria) {
+        return categoriaService.eliminarCategoria(id_categoria);
     }
 
 

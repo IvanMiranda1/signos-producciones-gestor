@@ -4,6 +4,7 @@ import com.signosp.signospbackend.Models.especialidad.Especialidad;
 import com.signosp.signospbackend.Models.especialidad.EspecialidadDTO;
 import com.signosp.signospbackend.Service.EspecialidadService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,8 +32,8 @@ public class EspecialidadController {
         public void modificarEspecialidad(@RequestBody EspecialidadDTO especialidadDTO){
             especialidadService.modificarEspecialidad(especialidadDTO);
         }
-        @DeleteMapping
-        public void eliminarEspecialidad(@PathVariable Long id){
-            especialidadService.eliminarEspecialidad(id);
+        @DeleteMapping("/{id}")
+        public ResponseEntity<String> eliminarEspecialidad(@PathVariable Long id){
+            return especialidadService.eliminarEspecialidad(id);
         }
 }

@@ -1,5 +1,7 @@
 package com.signosp.signospbackend.Service;
 
+import com.signosp.signospbackend.Models.empleado.Empleado;
+import com.signosp.signospbackend.Models.empleado.EmpleadoRepository;
 import com.signosp.signospbackend.Models.especialidad.Especialidad;
 import com.signosp.signospbackend.Models.especialidad.EspecialidadDTO;
 import com.signosp.signospbackend.Models.especialidad.EspecialidadRepository;
@@ -11,11 +13,13 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class EspecialidadService {
     public final EspecialidadRepository especialidadRepository;
+    public final EmpleadoRepository empleadoRepository;
 
     public void crearEspecialidad(EspecialidadDTO especialidadDTO) {
         Especialidad nuevaEspecialidad = Especialidad.builder()
@@ -23,11 +27,14 @@ public class EspecialidadService {
                 .build();
         especialidadRepository.save(nuevaEspecialidad);
     }
+
     public ResponseEntity<String> modificarEspecialidad(EspecialidadDTO especialidadDTO){
-        Especialidad especialidad = especialidadRepository.findById(especialidadDTO.getId_especialidad()).orElse(null);
-        if(especialidad == null){
+        Optional<Especialidad> optionalEspecialidad = especialidadRepository.findById(especialidadDTO.getId_especialidad());
+        if(!optionalEspecialidad.isPresent()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontro la especialidad");
         }
+        Especialidad especialidad = optionalEspecialidad.get();
+
         Especialidad especialidadMod = Especialidad.builder()
                 .id_especialidad(especialidad.getId_especialidad())
                 .nombre(especialidadDTO.getNombre())
@@ -35,6 +42,7 @@ public class EspecialidadService {
         especialidadRepository.save(especialidadMod);
         return ResponseEntity.ok("Especialidad modificada");
     }
+
     public EspecialidadDTO convertirEspecialidadDTO(Especialidad especialidad) {
         return EspecialidadDTO.builder()
                 .id_especialidad(especialidad.getId_especialidad())
@@ -42,8 +50,15 @@ public class EspecialidadService {
                 .build();
     }
 
-    public void eliminarEspecialidad(Long id_especialidad){
-        especialidadRepository.deleteById(id_especialidad);
+    public ResponseEntity<String> eliminarEspecialidad(Long id_especialidad){
+        List<Long> id_empleados = empleadoRepository.findByIdEspecialidad(id_especialidad);
+        if(id_empleados.isEmpty()){
+            especialidadRepository.deleteById(id_especialidad);
+            return ResponseEntity.ok("Especialidad eliminada exitosamente.");
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("No se puede eliminar la especialidad porque está asociado a uno o más empleados.");
+        }
     }
 
     public List<EspecialidadDTO> findAll() {

@@ -8,12 +8,14 @@ import com.signosp.signospbackend.Models.evento.EventoRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -32,10 +34,10 @@ public class ClienteService {
     public ClienteDTO getClienteById(Long id) {
         Cliente cliente = clienteRepository.findById(id)
                 .orElseThrow(()-> new EntityNotFoundException("Error en getClienteById"));
-        return convertirClinteDTO(cliente);
+        return convertirClienteDTO(cliente);
     }
 
-    private ClienteDTO convertirClinteDTO(Cliente cliente) {
+    public ClienteDTO convertirClienteDTO(Cliente cliente) {
         return ClienteDTO.builder()
                 .id_cliente(cliente.getId_cliente())
                 .nomyape(cliente.getNomyape())
@@ -46,18 +48,19 @@ public class ClienteService {
 
     @Transactional
     public ResponseEntity<String> modificarCliente(ClienteDTO clienteDTO){
-        Cliente cliente = clienteRepository.findById(clienteDTO.getId_cliente()).orElse(null);
-        if(cliente == null){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente no encontrado (modificar cliente)");
+        Optional<Cliente> optionalCliente = clienteRepository.findById(clienteDTO.getId_cliente());
+        if(!optionalCliente.isPresent()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente no encontrado");
         }
-        //deberia validar si cliente esta en eventos?
-        // si no, mostrar una alerta y confirmar la eliminacion de eventos con el cliente solicitado
+        Cliente cliente = optionalCliente.get();
+
         Cliente clienteModificado = Cliente.builder()
                 .id_cliente(cliente.getId_cliente())
                 .nomyape(clienteDTO.getNomyape() != null ? clienteDTO.getNomyape() : cliente.getNomyape())
                 .correo(clienteDTO.getCorreo() != null ? clienteDTO.getCorreo() : cliente.getCorreo())
                 .telefono(clienteDTO.getTelefono() != null ? clienteDTO.getTelefono() : cliente.getTelefono())
                 .build();
+
         clienteRepository.save(clienteModificado);
         return ResponseEntity.ok("Cliente modificado");
     }
@@ -80,23 +83,36 @@ public class ClienteService {
         }
     }
     public ResponseEntity<String> eliminarCliente(Long id_cliente){
-        clienteRepository.deleteById(id_cliente);
-        return ResponseEntity.ok("Cliente eliminado junto a los eventos");
+        List<Evento> eventos = eventoRepository.findById_cliente(id_cliente);
+        if(eventos.isEmpty()){
+            clienteRepository.deleteById(id_cliente);
+            return ResponseEntity.ok("Cliente eliminado");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El cliente esta asociado a un evento,\npruebe eliminando el evento.");
+        }
     }
 
     public ClienteDTO getClientePorNombre(String nombre) {
         Cliente c = clienteRepository.findByNomyape(nombre)
                 .orElseThrow(()-> new EntityNotFoundException("error en getClientePorNombre"));
-        ClienteDTO resultado = convertirClinteDTO(c);
+        ClienteDTO resultado = convertirClienteDTO(c);
         return resultado;
     }
     public List<ClienteDTO> findAll(){
         List<Cliente> a = clienteRepository.findAll();
         List<ClienteDTO> list = new ArrayList<>();
         for(Cliente c : a){
-            list.add(convertirClinteDTO(c));
+            list.add(convertirClienteDTO(c));
         }
         return list;
     }
 
+    public ResponseEntity<?> existeCliente(ClienteDTO clienteDTO) {
+        Cliente cliente = clienteRepository.existeCliente(clienteDTO.getNomyape(),clienteDTO.getTelefono(),clienteDTO.getCorreo());
+        if(cliente!=null){
+            return ResponseEntity.ok(convertirClienteDTO(cliente));
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontro el cliente");
+        }
+    }
 }

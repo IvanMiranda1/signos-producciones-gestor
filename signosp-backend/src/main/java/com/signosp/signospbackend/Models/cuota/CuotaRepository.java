@@ -6,6 +6,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface CuotaRepository extends JpaRepository<Cuota, Long> {
@@ -17,4 +18,7 @@ public interface CuotaRepository extends JpaRepository<Cuota, Long> {
 
     @Query("SELECT COUNT(c) FROM Cuota c WHERE c.pago.id_pago = :id_pago")
     Long coutByPagoId(@Param("id_pago") Long idPago);
+
+    @Query("SELECT c FROM Cuota c WHERE c.pago.id_pago = :idPago AND c.nro_cuota = :nroCuota")
+    Optional<Cuota> findByIdxNroCuota(@Param("idPago") Long idPago, @Param("nroCuota") Integer nroCuota);
 }

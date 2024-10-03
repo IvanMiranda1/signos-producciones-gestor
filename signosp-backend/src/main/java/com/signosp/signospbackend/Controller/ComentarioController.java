@@ -29,7 +29,7 @@ public class ComentarioController {
     public void modificarComentario(@RequestBody ComentarioDTO comentarioDTO){
         comentarioService.modificarcomentario(comentarioDTO);
     }
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     public void eliminarComentario(@PathVariable Long id){
         comentarioService.eliminarComentario(id);
     }

@@ -5,12 +5,14 @@ import com.signosp.signospbackend.Models.subtarea.SubtareaDTO;
 import com.signosp.signospbackend.Models.subtarea.SubtareaRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -21,7 +23,7 @@ public class SubtareaService {
         Subtarea subtarea = Subtarea.builder()
                 .id_evento(subtareaDTO.getId_evento())
                 .nombre(subtareaDTO.getNombre())
-                .estado(subtareaDTO.getEstado())
+                .estado(false)
                 .build();
         subtareaRepository.save(subtarea);
     }
@@ -35,10 +37,12 @@ public class SubtareaService {
                 .build();
     }
     public ResponseEntity<String> modificarSubtarea(SubtareaDTO subtareaDTO){
-        Subtarea subtarea = subtareaRepository.findById(subtareaDTO.getId_subtarea()).orElse(null);
-        if(subtarea==null){
+        Optional<Subtarea> optionalSubtarea = subtareaRepository.findById(subtareaDTO.getId_subtarea());
+        if(!optionalSubtarea.isPresent()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontro la subtarea");
         }
+        Subtarea subtarea = optionalSubtarea.get();
+
         Subtarea subtareaMod = Subtarea.builder()
                 .id_subtarea(subtarea.getId_subtarea())
                 .id_evento(subtarea.getId_evento())
@@ -74,5 +78,16 @@ public class SubtareaService {
             listDTO.add(convertirSubtareaDTO(subtarea));
         }
         return listDTO;
+    }
+
+    public ResponseEntity<String> terminarSubtarea(Long id) {
+        Optional<Subtarea> optionalSubtarea = subtareaRepository.findById(id);
+        if(!optionalSubtarea.isPresent()){
+           return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encuentra subtarea.");
+        }
+        Subtarea subtarea = optionalSubtarea.get();
+        subtarea.setEstado(!subtarea.getEstado());
+        subtareaRepository.save(subtarea);
+        return ResponseEntity.ok("Subtarea modificada.");
     }
 }

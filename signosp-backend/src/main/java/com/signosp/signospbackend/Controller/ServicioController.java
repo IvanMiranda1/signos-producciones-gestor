@@ -4,6 +4,7 @@ import com.signosp.signospbackend.Models.servicio.Servicio;
 import com.signosp.signospbackend.Models.servicio.ServicioDTO;
 import com.signosp.signospbackend.Service.ServicioService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,8 +32,8 @@ public class ServicioController {
         public void modificarServicio(@RequestBody ServicioDTO servicioDTO){
             servicioService.modificarServicio(servicioDTO);
         }
-        @DeleteMapping
-        public void eliminarServicio(@PathVariable Long id){
-            servicioService.eliminarServicio(id);
+        @DeleteMapping("/{id}")
+        public ResponseEntity<String> eliminarServicio(@PathVariable Long id){
+            return servicioService.eliminarServicio(id);
         }
 }

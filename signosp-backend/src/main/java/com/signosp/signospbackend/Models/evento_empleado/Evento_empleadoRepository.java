@@ -9,6 +9,9 @@ import java.util.List;
 
 @Repository
 public interface Evento_empleadoRepository extends JpaRepository<Evento_empleado, Long> {
-    @Query(value = "SELECT rec FROM Evento_empleado rec JOIN FETCH rec.empleado e WHERE e.id_empleado = :idEvento")
+    @Query(value = "SELECT rec FROM Evento_empleado rec JOIN FETCH rec.evento e WHERE e.id_evento = :idEvento")
     List<Evento_empleado> findEmpleadosxEvento(@Param("idEvento")Long idEvento);
+
+    @Query(value = "SELECT rec FROM Evento_empleado rec JOIN FETCH rec.evento ev JOIN FETCH rec.empleado em WHERE ev.id_evento = :idEvento AND em.id_empleado = :idEmpleado")
+    Evento_empleado findbyIds(@Param("idEvento") Long idEvento,@Param("idEmpleado") Long idEmpleado);
 }

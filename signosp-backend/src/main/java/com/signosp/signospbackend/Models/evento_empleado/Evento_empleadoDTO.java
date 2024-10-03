@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -15,6 +17,4 @@ public class Evento_empleadoDTO {
     private Long id_evento_empleado;
     private Long id_evento;
     private Long id_empleado;
-    @DateTimeFormat(pattern="dd/MM/yyyy")
-    private Date fecha_trabajada;
 }

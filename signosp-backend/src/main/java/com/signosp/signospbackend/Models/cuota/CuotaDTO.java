@@ -1,6 +1,7 @@
 package com.signosp.signospbackend.Models.cuota;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,7 +18,7 @@ public class CuotaDTO {
     private Long id_pago;
     private Integer nro_cuota;
     private Float monto;
-    @DateTimeFormat(pattern="dd/MM/yyyy")
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date fecha_de_pago;
-
 }

@@ -2,6 +2,7 @@ package com.signosp.signospbackend.Models.comentario;
 
 import com.signosp.signospbackend.Models.empleado.Empleado;
 import com.signosp.signospbackend.Models.evento.Evento;
+import com.signosp.signospbackend.User.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,7 +25,7 @@ public class Comentario {
     @JoinColumn(name="id_evento")
     private Evento evento;
     @ManyToOne
-    @JoinColumn(name="id_empleado")
-    private Empleado empleado;
+    @JoinColumn(name="id_usuario")
+    private User usuario;
 
 }
